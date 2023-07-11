@@ -1,0 +1,92 @@
+commerce_budgets_fulfillment_processing:
+  id: commerce_budgets_fulfillment_processing
+  group: commerce_order
+  label: 'Presupuesto'
+  states:
+    draft:
+      label: Draft
+    carrito:
+      label: Carrito de la compra
+    procesodecompra:
+      label: Compra Proceso de compra
+    envio:
+      label: Compra Envio
+    revision:
+      label: Compra Revision
+    pago:
+      label: Compra Pago
+    confirmarpedido:
+      label: Compra Confirmar pedido
+    compracompleto:
+      label: Compra Completo
+    budget:
+      label: Presupuesto
+    pendiente:
+      label: Pendiente
+    procesando:
+      label: Procesando
+    invoiced:
+      label: Facturado
+    completedbudget:
+      label: Decrementar stock
+    fulfill:
+      label: Completado
+    cancel:
+      label: Canceled
+  transitions:
+    place:
+      label: 'Presupuesto'
+      from: [ draft ]
+      to: budget
+    carrito:
+      label: 'Carrito de la compra'
+      from: [ budget, pendiente, procesodecompra, envio, revision, pago, confirmarpedido, compracompleto, completedbudget, procesando, invoiced, fulfill, cancel ]
+      to: carrito
+    procesodecompra:
+      label: 'Compra: Proceso de compra'
+      from: [ budget, pendiente, carrito, envio, revision, pago, confirmarpedido, compracompleto, completedbudget, procesando, invoiced, fulfill, cancel ]
+      to: procesodecompra
+    envio:
+      label: 'Compra: Envio'
+      from: [ budget, pendiente, carrito, procesodecompra, revision, pago, confirmarpedido, compracompleto, completedbudget, procesando, invoiced, fulfill, cancel ]
+      to: envio
+    revision:
+      label: 'Compra: Revision'
+      from: [ budget, carrito, procesodecompra, envio, pago, confirmarpedido, compracompleto, completedbudget, procesando, invoiced, fulfill, cancel ]
+      to: revision
+    pago:
+      label: 'Compra: Pago'
+      from: [ budget, pendiente, carrito, procesodecompra, envio, revision, confirmarpedido, compracompleto, completedbudget, procesando, invoiced, fulfill, cancel ]
+      to: pago
+    confirmarpedido:
+      label: 'Compra: confirmar pedido'
+      from: [ budget, pendiente, carrito, procesodecompra, envio, revision, pago, compracompleto, completedbudget, procesando, invoiced, fulfill, cancel ]
+      to: confirmarpedido
+    compracompleto:
+      label: 'Compra:completo'
+      from: [ pendiente, budget, carrito, procesodecompra, envio, revision, pago, confirmarpedido, completedbudget, procesando, invoiced, fulfill, cancel ]
+      to: compracompleto
+    pendiente:
+      label: 'Pendiente'
+      from: [ completedbudget, budget, carrito, procesodecompra, envio, revision, pago, confirmarpedido, compracompleto, procesando, invoiced, fulfill, cancel ]
+      to: pendiente
+    completedbudget:
+      label: 'Decrementar stock'
+      from: [ pendiente, budget, carrito, procesodecompra, envio, revision, pago, confirmarpedido, compracompleto, procesando, invoiced, fulfill, cancel ]
+      to: completedbudget
+    procesando:
+      label: 'Procesando'
+      from: [ pendiente, budget, carrito, procesodecompra, envio, revision, pago, confirmarpedido, compracompleto, completedbudget, invoiced, fulfill, cancel ]
+      to: procesando
+    invoiced:
+      label: 'Facturado'
+      from: [ pendiente, budget, carrito, procesodecompra, envio, revision, pago, confirmarpedido, compracompleto, completedbudget, procesando, fulfill, cancel ]
+      to: invoiced
+    fulfill:
+      label: 'Completado'
+      from: [ pendiente, budget, carrito, procesodecompra, envio, revision, pago, confirmarpedido, compracompleto, completedbudget, procesando, invoiced, cancel ]
+      to: fulfill
+    cancel:
+      label: 'Cancelado'
+      from: [ pendiente, budget, carrito, procesodecompra, envio, revision, pago, confirmarpedido, compracompleto, completedbudget, procesando, invoiced, fulfill ]
+      to: cancel
